@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+
 function CommentPage() {
     const [comments, setComments] = useState([])
     const [commentDetails, setCommentDetails] = useState("")
@@ -7,7 +9,7 @@ function CommentPage() {
 
 
     const router = useRouter()
-   // const id = router.query
+    // const id = router.query
     const fetchComments = async () => {
         const response = await fetch('/api/comment')
         const data = await response.json()
@@ -26,7 +28,7 @@ function CommentPage() {
             method: 'DELETE'
         })
         const data = await response.json()
-        console.log("Delete Comment",data);
+        console.log("Delete Comment", data);
         fetchComments()
     }
     const submitComment = async () => {
@@ -56,28 +58,33 @@ function CommentPage() {
 
                 comments.map((comment) => {
                     return (
-                        <div key={comment.id} style={{marginTop: '5px',backgroundColor:'green'}}>
-                            {comment.id} --- {comment.text} --  <button onClick={()=> fetchCommentDetails(comment.id)}>Details</button>
-                            <button onClick={()=> deleteComment(comment.id)}>Delete</button>
+                        <div key={comment.id} style={{ marginTop: '5px', backgroundColor: 'green' }}>
+                            {comment.id} --- {comment.text} -- 
+                             <button >
+                                <Link href={`/api/comment/${comment.id}`} >
+                                    <a>Details</a>
+                                </Link >
+                                </button>
+                            <button onClick={() => deleteComment(comment.id)}>Delete</button>
                         </div>
- 
+
                     )
                 })
             }
             {
-commentDetails ?
-                
-                        <div key={commentDetails.id} style={{marginTop: '5px',backgroundColor:'green'}}>
-                            {commentDetails.id} --- {commentDetails.text} --  
-                            <button onClick={()=> deleteComment(commentDetails.id)}>Delete</button>
-                        </div>
-                        : ''
-  
+                commentDetails ?
+
+                    <div key={commentDetails.id} style={{ marginTop: '5px', backgroundColor: 'green' }}>
+                        {commentDetails.id} --- {commentDetails.text} --
+                        <button onClick={() => deleteComment(commentDetails.id)}>Delete</button>
+                    </div>
+                    : ''
+
             }
-         
-            
-                      
-            
+
+
+
+
         </>
     )
 }
